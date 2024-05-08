@@ -49,7 +49,7 @@ export const LoginForm = () => {
                         router.push('/auth/new-verification')
                     }
                     else if(data?.success && !data?.redirect){
-                        router.push('/');
+                        window.location.href = '/';
                     }
                 })
         })

@@ -19,7 +19,7 @@ const AuthLayout = ({
                           />
                       </div>
                   </div>
-                  <div className="bg-white overflow-hidden lg:w-[40%] z-10 flex items-center justify-center h-full w-full">
+                  <div className="bg-white dark:bg-[#09090B] overflow-hidden lg:w-[40%] z-10 flex items-center justify-center h-full w-full">
                       {children}
                   </div>
               </div>
