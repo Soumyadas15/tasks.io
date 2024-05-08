@@ -22,6 +22,109 @@ import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
 
+interface MarkProps{
+    taskId: string;
+}
+
+const MarkComplete = ({
+    taskId,
+} : MarkProps) => {
+
+    const router = useRouter();
+
+    const markAsComplete = async() => {
+        axios.put(`/api/tasks/${taskId}`, { updatedStatus: true })
+        .then(() => {
+            router.refresh();
+            toast.success('Marked as complete');
+        }) .catch((error) => {
+            toast.error(error.response.data);
+        })
+    }
+
+    return (
+        <div 
+            className="w-full h-full flex items-center gap-2"
+            onClick={markAsComplete}
+        >
+            <Check size={20}/>
+            <p>Mark as complete</p>
+        </div>
+    )
+}
+
+
+const MarkInComplete = ({
+    taskId,
+} : MarkProps) => {
+
+    const router = useRouter();
+
+    const markAsInComplete = async() => {
+        axios.put(`/api/tasks/${taskId}`, { updatedStatus: false })
+        .then(() => {
+            router.refresh();
+            toast.success('Marked as complete');
+        }) .catch((error) => {
+            toast.error(error.response.data);
+        })
+    }
+
+    return (
+        <div 
+            className="w-full h-full flex items-center gap-2"
+            onClick={markAsInComplete}
+        >
+            <X size={20}/>
+            <p>Mark as incomplete</p>
+        </div>
+    )
+}
+
+
+interface DeleteTaskProps{
+    taskId: string;
+}
+const DeleteTask = ({
+    taskId,
+} : DeleteTaskProps) => {
+
+    const { onOpen } = useModal();
+    const router = useRouter();
+
+    return (
+        <div 
+            className="w-full h-full flex items-center gap-2"
+            onClick={() => onOpen('deleteModal', taskId)}
+        >
+            <Trash2 size={20}/>
+            <p>Delete Task</p>
+        </div>
+    )
+}
+
+interface EditTaskProps{
+    taskId: string;
+    task: Task;
+}
+const EditTask = ({
+    taskId,
+    task
+} : EditTaskProps) => {
+
+    const { onOpen } = useModal();
+    const router = useRouter();
+
+    return (
+        <div 
+            className="w-full h-full flex items-center gap-2"
+            onClick={() => onOpen('editTaskModal', taskId, task)}
+        >
+            <Pencil size={20}/>
+            <p>Edit Task</p>
+        </div>
+    )
+}
 
 
 export const columns: ColumnDef<Task>[] = [
@@ -125,28 +228,7 @@ export const columns: ColumnDef<Task>[] = [
       const task = row.original
 
       const taskId = task.id;
-      const { onOpen } = useModal();
-      const router = useRouter();
 
-      const markAsComplete = async(task : Task) => {
-        axios.put(`/api/tasks/${task.id}`, { updatedStatus: true })
-        .then(() => {
-            router.refresh();
-            toast.success('Marked as complete');
-        }) .catch((error) => {
-            toast.error(error.response.data);
-        })
-      }
-
-      const markAsInComplete = async(task : Task) => {
-        axios.put(`/api/tasks/${task.id}`, { updatedStatus: false })
-        .then(() => {
-            router.refresh();
-            toast.success('Marked as incomplete');
-        }) .catch((error) => {
-            toast.error(error.response.data);
-        })
-      }
 
  
       return (
@@ -159,39 +241,31 @@ export const columns: ColumnDef<Task>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => onOpen('editTaskModal', taskId, task)}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 cursor-pointer"
             >
-             <Pencil size={20}/>
-              Edit task
+             <EditTask task={task} taskId={taskId} />
             </DropdownMenuItem>
 
             {!task.hasCompleted ? (
                 <DropdownMenuItem
-                    onClick={() => markAsComplete(task)}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 cursor-pointer"
                 >
-                    <Check size={20}/>
-                    Mark as complete
+                    <MarkComplete taskId={taskId}/>
                 </DropdownMenuItem>
             ) : (
                 <DropdownMenuItem
-                    onClick={() => markAsInComplete(task)}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 cursor-pointer"
                 >
-                    <X size={20}/>
-                    Mark as incomplete
+                    <MarkInComplete taskId={taskId}/>
                 </DropdownMenuItem>
             )}
             
 
             <DropdownMenuSeparator />
             <DropdownMenuItem
-                onClick={() => onOpen('deleteModal', taskId)}
-                className="text-destructive flex items-center gap-2"
+                className="text-destructive flex items-center gap-2 cursor-pointer"
             >
-                <Trash2 size={20}/>
-                Delete Task
+                <DeleteTask taskId={taskId} />
             </DropdownMenuItem>
 
 
