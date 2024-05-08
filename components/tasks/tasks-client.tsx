@@ -1,20 +1,39 @@
-import { Task } from "@prisma/client"
+"use client"
+
+import { Task, User } from "@prisma/client"
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import EmptyState from "@/components/empty-state";
+import { Button } from "@/components/ui/button";
 
 interface TasksClientProps{
     tasks: Task[];
+    user: User[]
 }
 
 export const TasksClient = ({
     tasks,
+    user,
 } : TasksClientProps) => {
 
+    if(!user) {
+        return (
+            <div className="w-full h-full flex flex-col items-center justify-center">
+                <EmptyState
+                    title = "You are not logged in"
+                    subtitle = "Login to view tasks"
+                    showLogin
+                />
+                
+            </div>
+        )
+    }
 
     if(tasks?.length === 0) {
         return (
             <div className="w-full h-full flex items-center justify-center">
-                <h1 className="text-3xl font-bold">No tasks yet</h1>
+                <EmptyState/>
             </div>
         )
     }

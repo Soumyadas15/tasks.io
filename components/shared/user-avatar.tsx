@@ -6,10 +6,14 @@ import {
     AvatarImage 
 } from "@/components/ui/avatar"
 import { useCurrentUser } from "@/hooks/use-current-user"
+import { User } from "@prisma/client"
 
-export const UserAvatar = () => {
-
-    const user = useCurrentUser();
+interface UserAvatarProps{
+    user: User;
+}
+export const UserAvatar = ({
+    user,
+} : UserAvatarProps) => {
 
     return (
         <Avatar>

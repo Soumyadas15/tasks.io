@@ -1,6 +1,7 @@
 import { getVerificationTokenByEmail } from '@/data/verification-token';
 import { randomBytes } from 'crypto';
 import { db } from '@/lib/db';
+import { sendVerificationEmail } from '@/lib/mail';
 
 function generateRandomCode(): string {
     const characters = '0123456789';
@@ -38,6 +39,11 @@ export const generateVerificationToken = async(
             expires: expires,
         }
     })
+
+    await sendVerificationEmail(
+        verificationToken.email,
+        verificationToken.token
+    )
 
     return verificationToken;
 }

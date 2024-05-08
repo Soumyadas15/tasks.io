@@ -48,6 +48,9 @@ export const LoginForm = () => {
                     if(data?.redirect){
                         router.push('/auth/new-verification')
                     }
+                    else if(data?.success && !data?.redirect){
+                        router.push('/');
+                    }
                 })
         })
     }

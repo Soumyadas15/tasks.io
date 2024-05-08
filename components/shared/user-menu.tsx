@@ -9,17 +9,28 @@ import {
 
 import { UserAvatar } from "@/components/shared/user-avatar"
 import { logout } from "@/actions/logout.action"
+import { useRouter } from "next/navigation"
+import { User } from "@prisma/client"
 
+interface UserMenuProps{
+    user: User;
+}
+export const UserMenu = ({
+    user,
+} : UserMenuProps) => {
 
-export const UserMenu = () => {
+    const router = useRouter();
 
     const handleLogout = () => {
         logout()
+        .then(() => {
+            router.refresh();
+        })
     }
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <UserAvatar/>
+                <UserAvatar user={user}/>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem onClick={handleLogout}>

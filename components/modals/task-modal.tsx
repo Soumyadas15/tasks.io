@@ -82,7 +82,7 @@ export const TaskModal = () => {
 
     const actionLabel = useMemo(() => {
         if(step === STEPS.DUE_DATE){
-            return 'Search'
+            return 'Create'
         }
         return 'Next'
     }, [step]);
